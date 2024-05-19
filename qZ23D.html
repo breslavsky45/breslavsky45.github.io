@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="quiz_style.css">
+    <title>Question Z23D</title>
+    <script type="application/javascript" src="question_hints.js"></script>
+    <script>
+        questionNum = "Z23D"
+        correctSolution = "3"
+        function checkAnswer() {
+            const options = document.getElementsByName('radio');
+            let selectedOption;
+            for (const option of options) {
+                if (option.checked) {
+                    selectedOption = option.id
+                    break;
+                }
+            }
+
+            if (selectedOption === correctSolution) { // Replace 'correctanswer' with the actual correct answer
+                // Save progress to localStorage
+                let visited = JSON.parse(localStorage.getItem("visited")) || [];
+                if (!visited.includes(questionNum)) {
+                    visited.push(questionNum);
+                    localStorage.setItem("visited", JSON.stringify(visited));
+                    alert("כל הכבוד! רמז הבא: " + document.getElementById("nextHint").innerText);
+                }
+            } else {
+                alert("תשובה שגויה. כעונש - 30 שניות עד לניסיון הבא (אמינות)");
+            }
+        }
+
+        window.onload = function() {
+            let visited = JSON.parse(localStorage.getItem("visited")) || [];
+            if (visited.includes(questionNum)) {
+                document.getElementById("alreadyAnswered").style.display = "block";
+                document.getElementById("questionForm").style.display = "none";
+            } else {
+                document.getElementById("questionForm").style.display = "block";
+            }
+
+            // List of questions
+            questions = Object.keys(question_hints)
+            // Filter out visited questions
+            let remaining = questions.filter(q => !visited.includes(q));
+            if (remaining.length > 0) {
+                // Choose a random question from the remaining ones
+                const nextQuestion = remaining[Math.floor(Math.random() * remaining.length)];
+                document.getElementById("nextHint").innerText = question_hints[nextQuestion];
+            } else {
+                document.getElementById("nextHint").innerText = "You have completed the treasure hunt!";
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="alreadyAnswered" style="display:none;">
+        <h1>You already answered this question</h1>
+    </div>
+
+    <form onsubmit="return checkAnswer()" id="questionForm">
+    <div class="container mt-sm-5 my-1" dir="rtl">
+        <div class="question">
+            <div class="py-2 h5"><b>שאלה Z23D: בכמה נאומים שלו, רתם הפיל את הטקסט שהוא מקריא?  </b></div>
+            <div id="options">
+                <label class="options">רק אחד
+                    <input type="radio" name="radio" id="1">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="options">שניים בדיוק
+                    <input type="radio" name="radio" id="2">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="options">לפחות שניים
+                    <input type="radio" name="radio" id="3">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="options">אף פעם
+                    <input type="radio" name="radio" id="4">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+        </div>
+        <div class="d-flex align-items-center pt-3">
+            <div class="ml-auto">
+                <button class="btn btn-success" type="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <div id="nextHint" class="mt-5" style="display: none"></div>
+
+</body>
+</html>
